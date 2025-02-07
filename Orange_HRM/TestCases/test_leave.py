@@ -1,0 +1,126 @@
+import time
+import pytest
+from utilities.customLogger import LogGen
+from PageObjects.LeavePage import Leave
+from TestCases.test_login import LoginPage
+from selenium import webdriver
+from utilities.readProperties import ReadConfig
+
+logger = LogGen.loggen()
+
+@pytest.fixture()
+def drivers():
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+    driver.implicitly_wait(10)
+    yield driver
+    driver.close()
+    driver.quit()
+
+def test_myinfo(drivers):
+    baseurl = ReadConfig.get_application_url()
+    username = ReadConfig.get_username()
+    password = ReadConfig.get_password()
+
+    login_page = LoginPage(drivers)
+    login_page.open_page(baseurl)
+    time.sleep(1)
+    login_page.user_name(username)
+    time.sleep(1)
+    login_page.pass_word(password)
+    time.sleep(1)
+    login_page.submit_button()
+    time.sleep(2)
+    logger.info("******** Login Successful *********")
+
+    leave = Leave(drivers)
+    leave.leave_page()
+    leave.leave_list()
+    time.sleep(1)
+    leave.fromdate("2025-01-08")
+    time.sleep(1)
+    leave.To_Date("2025-01-20")
+    time.sleep(1)
+    leave.leave_status()
+    time.sleep(2)
+    leave.leavetype()
+    time.sleep(2)
+    leave.employee_name_hint("ronaldo")
+    leave.search()
+    time.sleep(2)
+
+    logger.info("******** Leave List Page Completed *********")
+
+    leave.apply_tab()
+    leave.my_leave_tab()
+    leave.myleave_fromdate("2025-01-12")
+    time.sleep(2)
+    leave.myleave_todate("2025-01-20")
+    time.sleep(1)
+    leave.myleave_status()
+    time.sleep(1)
+    leave.leave_type()
+    time.sleep(3)
+    leave.search_my_leave()
+    time.sleep(2)
+
+    logger.info("******** My Leave Page Completed *********")
+
+    leave.entitlement_tab()
+    time.sleep(1)
+    leave.add_entitlement()
+    time.sleep(1)
+    leave.multiple_employees_radiobtn()
+    time.sleep(2)
+    leave.location()
+    time.sleep(3)
+    leave.leave_type_entitlement()
+    time.sleep(3)
+    leave.sub_unit()
+    time.sleep(3)
+    leave.leave_period()
+    time.sleep(2)
+    leave.entitlement("30")
+    leave.save_entitlement()
+    time.sleep(2)
+    leave.ok_button()
+    time.sleep(1)
+
+    logger.info("******** Add Leave Entitlement Completed *********")
+
+    leave.report_tab()
+    time.sleep(1)
+    leave.report_tab1()
+    time.sleep(1)
+    leave.leave_type_radio_button()
+    time.sleep(3)
+    leave.leave_type_entitlement()
+    time.sleep(3)
+    leave.leave_period()
+    time.sleep(2)
+    leave.location()
+    time.sleep(2)
+    leave.sub_unit()
+    time.sleep(3)
+    leave.past_employees_checkbox()
+    time.sleep(2)
+    leave.generate_button()
+    time.sleep(2)
+
+    logger.info("******** Report Tab Completed *********")
+
+    leave.assign_leave_tab()
+    leave.employee_name("ronaldo")
+    time.sleep(1)
+    leave.leave_type()
+    leave.from_date("2025-01-01")
+    leave.to_date("2025-01-08")
+    time.sleep(2)
+    leave.partial_day()
+    time.sleep(2)
+    leave.duration()
+    leave.assign_button()
+    time.sleep(5)
+
+    logger.info("******** Assign Leave Tab Completed *********")
+    logger.info("******** Test Leave Page Completed *********")
